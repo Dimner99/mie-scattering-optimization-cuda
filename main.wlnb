@@ -1,0 +1,165 @@
+{
+ "cells": [
+  {
+   "kind": 1,
+   "value": "We utilize the following definitions:\n*   $k_0$: Wavenumber in vacuum.\n*   $m$: Refractive index of the cylinder ($m = \\sqrt{\\varepsilon}$).\n*   $x = k_0 a$: Size parameter in vacuum.\n*   $mx = m k_0 a$: Size parameter inside the cylinder.\n*   $J_n(z)$: Bessel function of the first kind.\n*   $H_n^{(2)}(z)$: Hankel function of the second kind (representing outgoing waves for $e^{i\\omega t}$ time dependence).\n\n**The Recurrence Relation**\nLet $Z_\\nu$ (Bessel $J$ or Hankel $H$):\n$$ Z_n'(z) = Z_{n-1}(z) - \\frac{n}{z} Z_n(z) $$\n\n---\n\n### 1. TM Polarization ($E_z$ parallel to cylinder axis)\n\nIn this case, the magnetic field is transverse to the cylinder axis. The primary scalar field is the electric field component $E_z$.\n\n#### A. Field Definitions\nThe total electric field is expanded as:\n*   **Incident ($r > a$):** $E_z^{inc} = \\sum_{n=-\\infty}^{\\infty} i^{-n} J_n(k_0 r) e^{in\\phi}$\n*   **Scattered ($r > a$):** $E_z^{scat} = \\sum_{n=-\\infty}^{\\infty} i^{-n} a_n H_n^{(2)}(k_0 r) e^{in\\phi}$\n*   **Internal ($r < a$):** $E_z^{int} = \\sum_{n=-\\infty}^{\\infty} i^{-n} d_n J_n(m k_0 r) e^{in\\phi}$\n\n#### B. Boundary Conditions\nAt the interface $r=a$, tangential fields $E_z$ and $H_\\phi$ must be continuous.\n1.  **Continuity of $E_z$:**\n    $$ J_n(x) + a_n H_n^{(2)}(x) = d_n J_n(mx) $$\n2.  **Continuity of $H_\\phi$:**\n    From Maxwell's equations, $H_\\phi \\propto \\frac{\\partial E_z}{\\partial r}$.\n    $$ k_0 [J_n'(x) + a_n H_n^{(2)'}(x)] = m k_0 d_n J_n'(mx) $$\n    Simplifying ($k_0$ cancels):\n    $$ J_n'(x) + a_n H_n^{(2)'}(x) = m d_n J_n'(mx) $$\n\n#### C. Solution using Recurrence Relations\nSolving the linear system for $a_n$:\n$$ a_n = \\frac{m J_n(x) J_n'(mx) - J_n(mx) J_n'(x)}{J_n(mx) H_n^{(2)'}(x) - m H_n^{(2)}(x) J_n'(mx)} $$\n\nWe now substitute the recurrence relation $Z_n'(z) = Z_{n-1}(z) - \\frac{n}{z} Z_n(z)$.\n\n**Numerator Analysis:**\n$$ \\text{Num} = m J_n(x) \\left[ J_{n-1}(mx) - \\frac{n}{mx} J_n(mx) \\right] - J_n(mx) \\left[ J_{n-1}(x) - \\frac{n}{x} J_n(x) \\right] $$\nExpanding terms:\n$$ \\text{Num} = m J_n(x)J_{n-1}(mx) - \\frac{n}{x} J_n(x)J_n(mx) - J_n(mx)J_{n-1}(x) + \\frac{n}{x} J_n(mx)J_n(x) $$\nThe terms containing $\\frac{n}{x}$ cancel out perfectly.\n$$ \\text{Num} = m J_n(x)J_{n-1}(mx) - J_n(mx)J_{n-1}(x) $$\n\n**Denominator Analysis:**\n$$ \\text{Den} = J_n(mx) \\left[ H_{n-1}^{(2)}(x) - \\frac{n}{x} H_n^{(2)}(x) \\right] - m H_n^{(2)}(x) \\left[ J_{n-1}(mx) - \\frac{n}{mx} J_n(mx) \\right] $$\nExpanding terms:\n$$ \\text{Den} = J_n(mx)H_{n-1}^{(2)}(x) - \\frac{n}{x} J_n(mx)H_n^{(2)}(x) - m H_n^{(2)}(x)J_{n-1}(mx) + \\frac{n}{x} H_n^{(2)}(x)J_n(mx) $$\nThe terms containing $\\frac{n}{x}$ also cancel out perfectly.\n$$ \\text{Den} = J_n(mx)H_{n-1}^{(2)}(x) - m H_n^{(2)}(x)J_{n-1}(mx) $$\n\n#### TM Final Coefficients:\n**Scattering Coefficient ($a_n$):**\n$$ a_n^{TM} = \\frac{m J_n(x) J_{n-1}(mx) - J_n(mx) J_{n-1}(x)}{J_n(mx) H_{n-1}^{(2)}(x) - m H_n^{(2)}(x) J_{n-1}(mx)} $$\n\n**Internal Coefficient ($d_n$):**\n$$ d_n^{TM} = \\frac{- \\frac{2i}{\\pi x}}{J_n(mx) H_{n-1}^{(2)}(x) - m H_n^{(2)}(x) J_{n-1}(mx)} $$\n\n---\n\n### 2. TE Polarization ($H_z$ parallel to cylinder axis)\n\n#### A. Field Definitions\n*   **Incident:** $H_z^{inc} = \\sum_{n=-\\infty}^{\\infty} i^{-n} J_n(k_0 r) e^{in\\phi}$\n*   **Scattered:** $H_z^{scat} = \\sum_{n=-\\infty}^{\\infty} i^{-n} a_n H_n^{(2)}(k_0 r) e^{in\\phi}$\n*   **Internal:** $H_z^{int} = \\sum_{n=-\\infty}^{\\infty} i^{-n} d_n J_n(m k_0 r) e^{in\\phi}$\n\n#### B. Boundary Conditions\nAt $r=a$, tangential fields $H_z$ and $E_\\phi$ must be continuous.\n1.  **Continuity of $H_z$:**\n    $$ J_n(x) + a_n H_n^{(2)}(x) = d_n J_n(mx) $$\n2.  **Continuity of $E_\\phi$:**\n    From Maxwell's equations, $E_\\phi \\propto \\frac{1}{\\varepsilon} \\frac{\\partial H_z}{\\partial r}$. Outside $\\varepsilon=1$, inside $\\varepsilon=m^2$.\n    $$ k_0 [J_n'(x) + a_n H_n^{(2)'}(x)] = \\frac{1}{m^2} (m k_0) d_n J_n'(mx) $$\n    Simplifying:\n    $$ J_n'(x) + a_n H_n^{(2)'}(x) = \\frac{1}{m} d_n J_n'(mx) $$\n\n#### C. Solution using Recurrence Relations\nSolving for $a_n$:\n$$ a_n = \\frac{J_n(x) J_n'(mx) - m J_n(mx) J_n'(x)}{m J_n(mx) H_n^{(2)'}(x) - H_n^{(2)}(x) J_n'(mx)} $$\n\nSubstitute $Z_n'(z) = Z_{n-1}(z) - \\frac{n}{z} Z_n(z)$. Unlike the TM case, the terms will **not** perfectly cancel because of the $m$ factors.\n\n**Numerator Analysis:**\n$$ \\text{Num} = J_n(x) \\left[ J_{n-1}(mx) - \\frac{n}{mx} J_n(mx) \\right] - m J_n(mx) \\left[ J_{n-1}(x) - \\frac{n}{x} J_n(x) \\right] $$\n$$ \\text{Num} = J_n(x)J_{n-1}(mx) - \\frac{n}{mx} J_n(x)J_n(mx) - m J_n(mx)J_{n-1}(x) + \\frac{mn}{x} J_n(mx)J_n(x) $$\nCombining the terms with $J_n(x)J_n(mx)$:\n$$ \\text{Num} = J_n(x)J_{n-1}(mx) - m J_n(mx)J_{n-1}(x) + \\frac{n}{x} \\left( m - \\frac{1}{m} \\right) J_n(x)J_n(mx) $$\n\n**Denominator Analysis:**\n$$ \\text{Den} = m J_n(mx) \\left[ H_{n-1}^{(2)}(x) - \\frac{n}{x} H_n^{(2)}(x) \\right] - H_n^{(2)}(x) \\left[ J_{n-1}(mx) - \\frac{n}{mx} J_n(mx) \\right] $$\n$$ \\text{Den} = m J_n(mx)H_{n-1}^{(2)}(x) - \\frac{mn}{x} J_n(mx)H_n^{(2)}(x) - H_n^{(2)}(x)J_{n-1}(mx) + \\frac{n}{mx} H_n^{(2)}(x)J_n(mx) $$\nCombining the terms with $J_n(mx)H_n^{(2)}(x)$:\n$$ \\text{Den} = m J_n(mx)H_{n-1}^{(2)}(x) - H_n^{(2)}(x)J_{n-1}(mx) - \\frac{n}{x} \\left( m - \\frac{1}{m} \\right) J_n(mx)H_n^{(2)}(x) $$\n\n#### TE Final Coefficients:\n**Scattering Coefficient ($a_n$):**\n$$ a_n^{TE} = \\frac{J_n(x)J_{n-1}(mx) - m J_n(mx)J_{n-1}(x) + \\frac{n}{x}\\left( m - \\frac{1}{m} \\right) J_n(x)J_n(mx)}{m J_n(mx)H_{n-1}^{(2)}(x) - H_n^{(2)}(x)J_{n-1}(mx) - \\frac{n}{x}\\left( m - \\frac{1}{m} \\right) J_n(mx)H_n^{(2)}(x)} $$\n\n**Internal Coefficient ($d_n$):**\n$$ d_n^{TE} = \\frac{- \\frac{2im}{\\pi x}}{m J_n(mx)H_{n-1}^{(2)}(x) - H_n^{(2)}(x)J_{n-1}(mx) - \\frac{n}{x}\\left( m - \\frac{1}{m} \\right) J_n(mx)H_n^{(2)}(x)} $$\n",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {},
+   "executionSummary": {}
+  },
+  {
+   "kind": 2,
+   "value": "ClearAll[\"Global`*\"]\n(* Field in Vacuum (r > a) *)\nfieldOut = BesselJ[n, k0 * r] + an * HankelH2[n, k0 * r];\n\n(* Field in Cylinder (r < a) *)\nfieldIn = dn * BesselJ[n, m * k0 * r];\n\n\n(* 2. TM POLARIZATION (E || z) *)\ntmEq1 = (fieldOut == fieldIn) /. r -> a;\ntmEq2 = (D[fieldOut, r] == D[fieldIn, r]) /. r -> a;\ntmSol = Solve[{tmEq1, tmEq2}, {an, dn}];\ntmAn = Simplify[an /. tmSol[[1]] /. k0 * a -> x];\ntmDn = Simplify[dn /. tmSol[[1]] /. k0 * a -> x];\n\nPrint[\"--- TM Scattering Coefficient (an) ---\"];\nFullSimplify[tmAn]\nPrint[\"\\n--- TM Internal Coefficient (dn) ---\"];\nFullSimplify[tmDn]\n\n\n(* 3. TE POLARIZATION (H || z) *)\nteEq1 = (fieldOut == fieldIn) /. r -> a;\nteEq2 = (D[fieldOut, r] == (1/m^2) * D[fieldIn, r]) /. r -> a;\n\nteSol = Solve[{teEq1, teEq2}, {an, dn}];\n\nteAn = Simplify[an /. teSol[[1]] /. k0 * a -> x];\nteDn = Simplify[dn /. teSol[[1]] /. k0 * a -> x];\n\nPrint[\"\\n\\n--- TE Scattering Coefficient (an) ---\"];\nFullSimplify[teAn]\nPrint[\"\\n--- TE Internal Coefficient (dn) ---\"];\nFullSimplify[teDn]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<pre>--- TM Scattering Coefficient (an) ---\n</pre>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "\"--- TM Scattering Coefficient (an) ---\\n\"",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "2f9d0a53-fc70-43ad-aa17-2de8606a8e60",
+     "metadata": {
+      "cellLabel": "",
+      "isBoxData": false
+     }
+    },
+    {
+     "items": [
+      {
+       "data": "<div class=\"wexpr\"><wfrac><w><wrow><w></w><wrow><w></w><w>m</w><w></w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><wrow><w></w><wrow><w></w><w>-</w><w>1</w></wrow><w>+</w><w>n</w></wrow><w>,</w><wrow><w></w><w>m</w><w></w><w>x</w></wrow></wrow><wb>]</wb></wrow></wrow><w></w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><w>n</w><w>,</w><w>x</w></wrow><wb>]</wb></wrow></wrow></wrow><w>-</w><wrow><w></w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><wrow><w></w><wrow><w></w><w>-</w><w>1</w></wrow><w>+</w><w>n</w></wrow><w>,</w><w>x</w></wrow><wb>]</wb></wrow></wrow><w></w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><w>n</w><w>,</w><wrow><w></w><w>m</w><w></w><w>x</w></wrow></wrow><wb>]</wb></wrow></wrow></wrow></wrow></w><w><w></w><w><wrow><w></w><wrow><w></w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><w>n</w><w>,</w><wrow><w></w><w>m</w><w></w><w>x</w></wrow></wrow><wb>]</wb></wrow></wrow><w></w><wrow><w></w><w>HankelH2</w><wrow><w></w><wb>[</wb><wrow><w></w><wrow><w></w><wrow><w></w><w>-</w><w>1</w></wrow><w>+</w><w>n</w></wrow><w>,</w><w>x</w></wrow><wb>]</wb></wrow></wrow></wrow><w>-</w><wrow><w></w><w>m</w><w></w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><wrow><w></w><wrow><w></w><w>-</w><w>1</w></wrow><w>+</w><w>n</w></wrow><w>,</w><wrow><w></w><w>m</w><w></w><w>x</w></wrow></wrow><wb>]</wb></wrow></wrow><w></w><wrow><w></w><w>HankelH2</w><wrow><w></w><wb>[</wb><wrow><w></w><w>n</w><w>,</w><w>x</w></wrow><wb>]</wb></wrow></wrow></wrow></wrow></w></w></wfrac></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "(m*BesselJ[-1 + n, m*x]*BesselJ[n, x] - BesselJ[-1 + n, x]*BesselJ[n, m*x])/(BesselJ[n, m*x]*HankelH2[-1 + n, x] - m*BesselJ[-1 + n, m*x]*HankelH2[n, x])",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "3d9f2396-8e42-40d5-85d5-9f66e9c5af7b",
+     "metadata": {
+      "cellLabel": "Out[132]= ",
+      "isBoxData": false
+     }
+    },
+    {
+     "items": [
+      {
+       "data": "<pre>\n--- TM Internal Coefficient (dn) ---\n</pre>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "\"\\n--- TM Internal Coefficient (dn) ---\\n\"",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "59b244f2-114a-424a-ab3d-277e4da4330c",
+     "metadata": {
+      "cellLabel": "",
+      "isBoxData": false
+     }
+    },
+    {
+     "items": [
+      {
+       "data": "<div class=\"wexpr\"><wrow><w></w><w>-</w><wfrac><w><wrow><w></w><w>2</w><w></w><w>𝕚</w></wrow></w><w><w></w><w><wrow><w></w><wrow><w></w><w>π</w><w></w><w>x</w><w></w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><w>n</w><w>,</w><wrow><w></w><w>m</w><w></w><w>x</w></wrow></wrow><wb>]</wb></wrow></wrow><w></w><wrow><w></w><w>HankelH2</w><wrow><w></w><wb>[</wb><wrow><w></w><wrow><w></w><wrow><w></w><w>-</w><w>1</w></wrow><w>+</w><w>n</w></wrow><w>,</w><w>x</w></wrow><wb>]</wb></wrow></wrow></wrow><w>-</w><wrow><w></w><w>m</w><w></w><w>π</w><w></w><w>x</w><w></w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><wrow><w></w><wrow><w></w><w>-</w><w>1</w></wrow><w>+</w><w>n</w></wrow><w>,</w><wrow><w></w><w>m</w><w></w><w>x</w></wrow></wrow><wb>]</wb></wrow></wrow><w></w><wrow><w></w><w>HankelH2</w><wrow><w></w><wb>[</wb><wrow><w></w><w>n</w><w>,</w><w>x</w></wrow><wb>]</wb></wrow></wrow></wrow></wrow></w></w></wfrac></wrow></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "(-2*I)/(Pi*x*BesselJ[n, m*x]*HankelH2[-1 + n, x] - m*Pi*x*BesselJ[-1 + n, m*x]*HankelH2[n, x])",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "986b61ed-99a9-46de-b14a-2e31e6b3d711",
+     "metadata": {
+      "cellLabel": "Out[134]= ",
+      "isBoxData": false
+     }
+    },
+    {
+     "items": [
+      {
+       "data": "<pre>\n\n--- TE Scattering Coefficient (an) ---\n</pre>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "\"\\n\\n--- TE Scattering Coefficient (an) ---\\n\"",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "c8fea936-1449-4443-b367-21da2469d228",
+     "metadata": {
+      "cellLabel": "",
+      "isBoxData": false
+     }
+    },
+    {
+     "items": [
+      {
+       "data": "<div class=\"wexpr\"><wfrac><w><wrow><w></w><wrow><w></w><w>m</w><w></w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><w>n</w><w>,</w><wrow><w></w><w>m</w><w></w><w>x</w></wrow></wrow><wb>]</wb></wrow></wrow><w></w><wrow><w></w><wb>(</wb><wrow><w></w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><wrow><w></w><wrow><w></w><w>-</w><w>1</w></wrow><w>+</w><w>n</w></wrow><w>,</w><w>x</w></wrow><wb>]</wb></wrow></wrow><w>-</w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><wrow><w></w><w>1</w><w>+</w><w>n</w></wrow><w>,</w><w>x</w></wrow><wb>]</wb></wrow></wrow></wrow><wb>)</wb></wrow></wrow><w>+</w><wrow><w></w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><w>n</w><w>,</w><w>x</w></wrow><wb>]</wb></wrow></wrow><w></w><wrow><w></w><wb>(</wb><wrow><w></w><wrow><w></w><w>-</w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><wrow><w></w><wrow><w></w><w>-</w><w>1</w></wrow><w>+</w><w>n</w></wrow><w>,</w><wrow><w></w><w>m</w><w></w><w>x</w></wrow></wrow><wb>]</wb></wrow></wrow></wrow><w>+</w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><wrow><w></w><w>1</w><w>+</w><w>n</w></wrow><w>,</w><wrow><w></w><w>m</w><w></w><w>x</w></wrow></wrow><wb>]</wb></wrow></wrow></wrow><wb>)</wb></wrow></wrow></wrow></w><w><w></w><w><wrow><w></w><wrow><w></w><wrow><w></w><w>-</w><w>2</w></wrow><w></w><w>m</w><w></w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><w>n</w><w>,</w><wrow><w></w><w>m</w><w></w><w>x</w></wrow></wrow><wb>]</wb></wrow></wrow><w></w><wrow><w></w><w>HankelH2</w><wrow><w></w><wb>[</wb><wrow><w></w><wrow><w></w><wrow><w></w><w>-</w><w>1</w></wrow><w>+</w><w>n</w></wrow><w>,</w><w>x</w></wrow><wb>]</wb></wrow></wrow></wrow><w>+</w><wrow><w></w><w>2</w><w></w><wrow><w></w><wb>(</wb><wrow><w></w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><wrow><w></w><wrow><w></w><w>-</w><w>1</w></wrow><w>+</w><w>n</w></wrow><w>,</w><wrow><w></w><w>m</w><w></w><w>x</w></wrow></wrow><wb>]</wb></wrow></wrow><w>+</w><wfrac class=\"script\"><w><wrow><w></w><wrow><w></w><wb>(</wb><wrow><w></w><wrow><w></w><w>-</w><w>1</w></wrow><w>+</w><wsup><w></w><w>m</w><w><w>2</w></w></wsup></wrow><wb>)</wb></wrow><w></w><w>n</w><w></w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><w>n</w><w>,</w><wrow><w></w><w>m</w><w></w><w>x</w></wrow></wrow><wb>]</wb></wrow></wrow></wrow></w><w><w></w><w><wrow><w></w><w>m</w><w></w><w>x</w></wrow></w></w></wfrac></wrow><wb>)</wb></wrow><w></w><wrow><w></w><w>HankelH2</w><wrow><w></w><wb>[</wb><wrow><w></w><w>n</w><w>,</w><w>x</w></wrow><wb>]</wb></wrow></wrow></wrow></wrow></w></w></wfrac></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "(m*BesselJ[n, m*x]*(BesselJ[-1 + n, x] - BesselJ[1 + n, x]) + BesselJ[n, x]*(-BesselJ[-1 + n, m*x] + BesselJ[1 + n, m*x]))/(-2*m*BesselJ[n, m*x]*HankelH2[-1 + n, x] + 2*(BesselJ[-1 + n, m*x] + ((-1 + m^2)*n*BesselJ[n, m*x])/(m*x))*HankelH2[n, x])",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "f1b7220e-28a1-4314-bbac-9960fa14f62f",
+     "metadata": {
+      "cellLabel": "Out[141]= ",
+      "isBoxData": false
+     }
+    },
+    {
+     "items": [
+      {
+       "data": "<pre>\n--- TE Internal Coefficient (dn) ---\n</pre>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "\"\\n--- TE Internal Coefficient (dn) ---\\n\"",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "829653d7-a005-46b6-a446-7a2bfd9350ad",
+     "metadata": {
+      "cellLabel": "",
+      "isBoxData": false
+     }
+    },
+    {
+     "items": [
+      {
+       "data": "<div class=\"wexpr\"><wrow><w></w><w>-</w><wfrac><w><wrow><w></w><w>2</w><w></w><w>𝕚</w><w></w><wsup><w></w><w>m</w><w><w>2</w></w></wsup></wrow></w><w><w></w><w><wrow><w></w><wrow><w></w><wrow><w></w><w>-</w><w>m</w></wrow><w></w><w>π</w><w></w><w>x</w><w></w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><wrow><w></w><wrow><w></w><w>-</w><w>1</w></wrow><w>+</w><w>n</w></wrow><w>,</w><wrow><w></w><w>m</w><w></w><w>x</w></wrow></wrow><wb>]</wb></wrow></wrow><w></w><wrow><w></w><w>HankelH2</w><wrow><w></w><wb>[</wb><wrow><w></w><w>n</w><w>,</w><w>x</w></wrow><wb>]</wb></wrow></wrow></wrow><w>+</w><wrow><w></w><w>π</w><w></w><wrow><w></w><w>BesselJ</w><wrow><w></w><wb>[</wb><wrow><w></w><w>n</w><w>,</w><wrow><w></w><w>m</w><w></w><w>x</w></wrow></wrow><wb>]</wb></wrow></wrow><w></w><wrow><w></w><wb>(</wb><wrow><w></w><wrow><w></w><wsup><w></w><w>m</w><w><w>2</w></w></wsup><w></w><w>x</w><w></w><wrow><w></w><w>HankelH2</w><wrow><w></w><wb>[</wb><wrow><w></w><wrow><w></w><wrow><w></w><w>-</w><w>1</w></wrow><w>+</w><w>n</w></wrow><w>,</w><w>x</w></wrow><wb>]</wb></wrow></wrow></wrow><w>-</w><wrow><w></w><wrow><w></w><wb>(</wb><wrow><w></w><wrow><w></w><w>-</w><w>1</w></wrow><w>+</w><wsup><w></w><w>m</w><w><w>2</w></w></wsup></wrow><wb>)</wb></wrow><w></w><w>n</w><w></w><wrow><w></w><w>HankelH2</w><wrow><w></w><wb>[</wb><wrow><w></w><w>n</w><w>,</w><w>x</w></wrow><wb>]</wb></wrow></wrow></wrow></wrow><wb>)</wb></wrow></wrow></wrow></w></w></wfrac></wrow></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "((-2*I)*m^2)/(-(m*Pi*x*BesselJ[-1 + n, m*x]*HankelH2[n, x]) + Pi*BesselJ[n, m*x]*(m^2*x*HankelH2[-1 + n, x] - (-1 + m^2)*n*HankelH2[n, x]))",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "d68ede55-9727-498f-8ba6-c81df99778a8",
+     "metadata": {
+      "cellLabel": "Out[143]= ",
+      "isBoxData": false
+     }
+    }
+   ],
+   "metadata": {},
+   "executionSummary": {}
+  },
+  {
+   "kind": 1,
+   "value": "The conservation of energy for a scattering cylinder dictates that the absorbed power ($P_{abs}$) is the residual energy after accounting for the extinction ($P_{ext}$) and scattering ($P_{sca}$) processes:\n\n$$P_{abs} = P_{ext} - P_{sca}$$\n\nAssuming a TM-polarized incident wave $E_z^{inc} = e^{-ik_0 x}$ with amplitude $E_0 = 1$, the incident intensity is $I_{inc} = \\frac{1}{2\\eta_0}$, where $\\eta_0$ is the wave impedance of vacuum.\n\n\n\nThe power scattered into the far-field is the integral of the time-averaged Poynting vector over a closed cylindrical surface $A$ as $r \\to \\infty$:\n\n$$P_{sca} = \\int_{0}^{2\\pi} \\frac{1}{2} \\text{Re}(E_z^{scat} H_\\phi^{scat*}) r d\\phi$$\n\nSubstituting the cylindrical harmonic expansion and the large-argument asymptotic form of the Hankel function $H_n^{(2)}(k_0 r) \\sim \\sqrt{\\frac{2}{i \\pi k_0 r}} i^n e^{-ik_0 r}$:\n\n$$E_z^{scat} = \\sum_{n=-\\infty}^{\\infty} i^{-n} a_n H_n^{(2)}(k_0 r) e^{in\\phi}, \\quad H_\\phi^{scat} \\approx \\frac{E_z^{scat}}{\\eta_0}$$\n\nBy applying the orthogonality of the azimuthal modes ($\\int_0^{2\\pi} e^{i(n-m)\\phi} d\\phi = 2\\pi \\delta_{nm}$) and noting that $|i^n|^2 = 1$ and $|e^{-ik_0 r}|^2 = 1$:\n\n$$P_{sca} = \\frac{1}{2\\eta_0} \\int_{0}^{2\\pi} \\left| \\sum_{n=-\\infty}^{\\infty} i^{-n} a_n \\sqrt{\\frac{2}{\\pi k_0 r}} i^n e^{-ik_0 r} e^{in\\phi} \\right|^2 r d\\phi$$\n\n$$P_{sca} = \\frac{1}{2\\eta_0} \\cdot \\frac{2}{\\pi k_0 r} \\cdot 2\\pi r \\sum_{n=-\\infty}^{\\infty} |a_n|^2 = \\frac{2}{k_0 \\eta_0} \\sum_{n=-\\infty}^{\\infty} |a_n|^2$$\n\n\n\nThe total power extracted from the incident beam is determined by the interference of the incident and scattered fields in the forward direction ($\\phi = 0$). For a 2D geometry, the Optical Theorem relates the extinction power to the real part of the scattering coefficients:\n\n$$P_{ext} = \\frac{2}{k_0 \\eta_0} \\text{Re} \\left[ \\sum_{n=-\\infty}^{\\infty} a_n \\right]$$\n\nIn a purely lossless scenario, $P_{ext} = P_{sca}$, requiring the identity $\\text{Re}(a_n) = |a_n|^2$. Any deviation represents energy lost to absorption within the cylinder.\n\n\nCombining the previous expressions, the total power absorbed per unit length is:\n\n$$P_{abs} = \\frac{2}{k_0 \\eta_0} \\sum_{n=-\\infty}^{\\infty} \\left[ \\text{Re}(a_n) - |a_n|^2 \\right]$$\n\nTo define the dimensionless efficiency $\\alpha_{abs}$, we normalize $P_{abs}$ by the power incident on the physical cross-section (diameter $D = 2a$):\n\n$$P_{0} = I_{inc} \\cdot 2a = \\frac{1}{2\\eta_0} \\cdot 2a = \\frac{a}{\\eta_0}$$\n\nFinally, substituting the size parameter $x = k_0 a$:\n\n$$Q = \\frac{P_{abs}}{P_{0}} = \\frac{ \\frac{2}{k_0 \\eta_0} \\sum \\left[ \\text{Re}(a_n) - |a_n|^2 \\right] }{ \\frac{a}{\\eta_0} }$$\n\n$$\\boxed{ Q = \\frac{2}{x} \\sum_{n=-\\infty}^{\\infty} \\left( \\text{Re}(a_n) - |a_n|^2 \\right) }$$",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {},
+   "executionSummary": {}
+  }
+ ]
+}
