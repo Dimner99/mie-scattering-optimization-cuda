@@ -34,3 +34,5 @@ Thumbs.db
 
 # PDF files (excluded from git)
 *.pdf
+*.nsys-rep
+*.sqlite
